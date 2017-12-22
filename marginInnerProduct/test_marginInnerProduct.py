@@ -23,7 +23,7 @@ if __name__ == '__main__':
     input_tensor = tf.constant(input)
     weight = np.random.randn(128, 64).astype('float32')
     weight_tensor = tf.nn.l2_normalize(tf.Variable(weight), dim=1)
-    m_value = tf.constant([4], dtype = tf.int32)
+    m_value = tf.constant([1], dtype = tf.int32)
     lambda_value = tf.constant([5], dtype = tf.float32)
     label = tf.constant(np.arange(32), dtype = tf.int32)
     label_float = tf.cast(label, tf.float32)
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         sess.run(tf.global_variables_initializer())
         for i in xrange(10000):
             print(i)
-            #grads=compute_gradient([inp1,inp2],[(16,32,3),(16,32,3)],loss,(1,),[xyz1,xyz2])
+            grads=compute_gradient([input_tensor, weight_tensor],[(32,64),(128,64)],loss,(1,),[input, weight])
             trainloss,_, weight_value, input_value = sess.run([loss, optimizer, weight_tensor, input_tensor], feed_dict = {learning_rate:0.1})
             print(trainloss, weight_value.mean(), input_value.mean())
 

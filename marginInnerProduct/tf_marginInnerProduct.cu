@@ -302,9 +302,70 @@ template <typename Dtype>
 void MarginInnerProductGradKernelLauncher(int M_, int N_, int K_, Dtype* bottom_data, Dtype* weight, int m_value, Dtype lambda_, const Dtype* label, Dtype* x_norm_data, Dtype* sign_0_data, Dtype* sign_1_data, Dtype* sign_2_data, Dtype* sign_3_data, Dtype* sign_4_data, Dtype* cos_theta_data, Dtype* cos_theta_quadratic_data, Dtype* cos_theta_cubic_data, Dtype* cos_theta_quartic_data, const Dtype* top_diff, Dtype* bottom_diff, Dtype* weight_diff){
 
 
+  /************************* common variables *************************/
+  // x_norm_ = |x|
+  int nthreads = M_;
+  Compute_bottom_norm_gpu<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
+      CAFFE_CUDA_NUM_THREADS>>>(nthreads, K_, bottom_data,
+                                x_norm_data);
+
+  nthreads = M_ * N_;
+  // cos_theta = x'w / |x|
+
+  caffe_gpu_gemm<Dtype>(CblasNoTrans, CblasTrans, M_, N_, K_, (Dtype)1.,
+      bottom_data, weight, (Dtype)0., cos_theta_data);
+  Compute_cos_theta_gpu<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
+      CAFFE_CUDA_NUM_THREADS>>>(nthreads, N_, x_norm_data, cos_theta_data);
+  // sign_0
+  caffe_gpu_sign(M_ * N_, cos_theta_data, sign_0_data);
+  
+  /************************* optional variables *************************/
+  switch (m_value) {
+  case 1:
+    break;
+  case 2:
+    // cos_theta_quadratic
+    caffe_gpu_powx(M_ * N_, cos_theta_data, (Dtype)2., cos_theta_quadratic_data);
+    break;
+  case 3:
+    // cos_theta_quadratic && cos_theta_cubic
+    caffe_gpu_powx(M_ * N_, cos_theta_data, (Dtype)2., cos_theta_quadratic_data);
+    caffe_gpu_powx(M_ * N_, cos_theta_data, (Dtype)3., cos_theta_cubic_data);
+    // sign_1 = sign(abs(cos_theta) - 0.5)
+    Compute_sign_1_gpu<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
+      CAFFE_CUDA_NUM_THREADS>>>(nthreads, cos_theta_data, sign_1_data);
+    caffe_gpu_sign(M_ * N_, sign_1_data, sign_1_data);
+    // sign_2 = sign_0 * (1 + sign_1) - 2
+    Compute_sign_2_gpu<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
+      CAFFE_CUDA_NUM_THREADS>>>(nthreads, sign_0_data,
+                                sign_1_data, sign_2_data);
+    break;
+  case 4:
+    // cos_theta_quadratic && cos_theta_cubic && cos_theta_quartic
+    caffe_gpu_powx(M_ * N_, cos_theta_data, (Dtype)2., cos_theta_quadratic_data);
+    caffe_gpu_powx(M_ * N_, cos_theta_data, (Dtype)3., cos_theta_cubic_data);
+    caffe_gpu_powx(M_ * N_, cos_theta_data, (Dtype)4., cos_theta_quartic_data);
+    // sign_3 = sign_0 * sign(2 * cos_theta_quadratic_ - 1)
+    Compute_sign_3_gpu<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
+      CAFFE_CUDA_NUM_THREADS>>>(nthreads, sign_0_data, cos_theta_quadratic_data,
+                                sign_3_data);
+    caffe_gpu_sign(M_ * N_, sign_3_data, sign_3_data);
+    // sign_4 = 2 * sign_0 + sign_3 - 3
+    Compute_sign_4_gpu<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
+      CAFFE_CUDA_NUM_THREADS>>>(nthreads, sign_0_data,
+                                sign_3_data, sign_4_data);
+
+    break;
+  }
+
+
+
+    //gradient to weight
+    caffe_gpu_gemm<Dtype>(CblasTrans, CblasNoTrans, N_, K_, M_, (Dtype)1.,
+        top_diff, bottom_data, (Dtype)0., weight_diff);
 
     // Gradient with respect to bottom data
-    int nthreads = M_ * K_;
+    nthreads = M_ * K_;
     switch (m_value) {
     case 1:
       caffe_gpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, M_, K_, N_, (Dtype)1.,

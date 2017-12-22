@@ -14,10 +14,10 @@ LIB_DIR = /usr/local/cuda-8.0/lib64
 COMMON_FLAGS += $(foreach libdir,$(LIB_DIR),-L$(libdir))
 
 #TF_INCLUDE = /usr/local/lib/python2.7/dist-packages/tensorflow/include
-$(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
+TF_INCLUDE = $(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
 $(warning $(TF_INCLUDE))
 #TF_LIB= /usr/local/lib/python2.7/dist-packages/tensorflow
-$(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
+TF_LIB = $(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
 $(warning $(TF_LIB))
 all: marginInnerProduct/libtf_marginInnerProduct.so
 .PHONY : all

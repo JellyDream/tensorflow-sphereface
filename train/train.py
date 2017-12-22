@@ -23,7 +23,7 @@ def _margin_inner_product_grad(op,top_diff):
 data_root_dir = 'data/'
 data_list = 'webface_list.txt'
 
-BATCH_SIZE = 256
+BATCH_SIZE = 100
 
 basic_learning_rate = 0.1
 weight_decay = 0.0005
@@ -98,13 +98,15 @@ def block(input, name, num_output):
         network = tf.add(input, network)
         return network
 
-def get_normal_loss(input, label, num_output, lambda_value, m_value):
+def get_normal_loss(input, label, num_output, lambda_value, m_value = 4):
     feature_dim = input.get_shape()[1]
-    weight = tf.get_variable('weight', shape = [num_output, feature_dim], regularizer = l2_regularizer)
-    weight = tf.nn.l2_normalize(weight, dim = 1)
+    weight = tf.get_variable('weight', shape = [num_output, feature_dim], regularizer = l2_regularizer, initializer = xavier)
     prob_distribution = tf.one_hot(label, num_output)
+    weight = tf.nn.l2_normalize(weight, dim = 1)
     label_float = tf.cast(label, tf.float32)
     margin_out = marginInnerProduct_module.margin_inner_product(input, weight, tf.constant(m_value), lambda_value, label_float)
+    #margin_out = tf.layers.dense(input, num_output)
+
     loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=margin_out, labels = prob_distribution))
     return loss
 
@@ -130,13 +132,14 @@ def load_data(filenames, BATCH_SIZE, do_shuffle):
             random.shuffle(filenames)
 
     batch_data = np.zeros((BATCH_SIZE, 112, 96, 3))
-    batch_label = np.zeros((BATCH_SIZE))
-    for i in range(used_count, used_count + BATCH_SIZE):
-        img_name = filenames[i].split()[0]
-        label = int(filenames[i].split()[1])
-        img = cv2.imread(filenames[i])
-        batch_data[i,:] = img
+    batch_label = np.zeros((BATCH_SIZE), dtype = np.int32)
+    for i in range(BATCH_SIZE):
+        img_name = filenames[used_count + i].split(' ')[0]
+        label = int(filenames[used_count + i].split(' ')[1])
+        img = cv2.imread(img_name)
+        batch_data[i,:] = (img-127.5)/128.0
         batch_label[i] = label
+    used_count = used_count + BATCH_SIZE
     return batch_data, batch_label
 
 def get_multistep_lr(iter_):
@@ -155,22 +158,28 @@ if __name__ == '__main__':
     input_labels = tf.placeholder(tf.int32, shape = [BATCH_SIZE])
 
     features = infer(input_images)
-    normal_loss = get_normal_loss(features, input_labels, 10512, lambda_value, 4)
+    normal_loss = get_normal_loss(features, input_labels, 10572, lambda_value, 2)
+    tf.summary.scalar('loss', normal_loss)
 
     loss = normal_loss + weight_decay * sum(reg_losses)
     optimizer = tf.train.MomentumOptimizer(learning_rate, 0.9).minimize(loss)
     
     filenames = file_list(data_root_dir, data_list)
+
+    merged_summary_op = tf.summary.merge_all()
+
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
+        file_writer = tf.summary.FileWriter('log', sess.graph)
         iter_ = 0
         for i in xrange(max_iter):
             batch_data, batch_label = load_data(filenames, BATCH_SIZE, True)
             lambda_value_out = get_lambda_value(iter_)
             feed_dict = {learning_rate:get_multistep_lr(iter_), lambda_value: lambda_value_out, input_images:batch_data, input_labels:batch_label}
-            _, loss_value = sess.run([optimizer, normal_loss], feed_dict = feed_dict)
+            _, loss_value,summary_str = sess.run([optimizer, normal_loss, merged_summary_op], feed_dict = feed_dict)
+            file_writer.add_summary(summary_str, iter_)
             iter_ = iter_ + 1
-            print(i, loss_value, lambda_value_out)
+            print(i, loss_value, lambda_value_out, get_multistep_lr(iter_))
 
 
 
