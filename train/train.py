@@ -53,6 +53,7 @@ begin_iteration = 0
 #do_jpgCompression = true
 
 l2_regularizer= tf.contrib.layers.l2_regularizer(1.0)
+xavier = tf.contrib.layers.xavier_initializer_conv2d() 
 
 def infer(input):
     with tf.variable_scope('conv1_'):
@@ -83,7 +84,7 @@ def prelu(x):
     return tf.maximum(x, tf.multiply(x, t))
 
 def first_conv(input, num_output):
-    xavier = tf.contrib.layers.xavier_initializer_conv2d() 
+    
     zero_init = tf.zeros_initializer()
     network = tf.layers.conv2d(input, num_output, kernel_size = [3, 3], strides = (2, 2), padding = 'same', kernel_initializer = xavier, bias_initializer = zero_init, kernel_regularizer = l2_regularizer, bias_regularizer = l2_regularizer)
     return network
