@@ -1,4 +1,5 @@
 *.tar.gz
 *.o
-train/data/*
-train/log/*
+train_test/data/*
+train_test/log/*
+train_test/ckpt/*

@@ -531,6 +531,7 @@ class MarginInnerProductGpuOp : public OpKernel{
             cudaMemcpy(&m_value, &m_value_tensor.flat<int32>()(0), sizeof(int), cudaMemcpyDeviceToHost);
             Dtype lambda_ = 0.;
             cudaMemcpy(&lambda_, &lambda_tensor.flat<Dtype>()(0), sizeof(Dtype), cudaMemcpyDeviceToHost);
+            //std::cout << "m_value:" << m_value << "lambda:" << lambda_ << std::endl;
             const float* label = &label_tensor.flat<Dtype>()(0);
 
             //common constant variable
@@ -703,7 +704,6 @@ class MarginInnerProductGradGpuOp : public OpKernel{
             Dtype* cos_theta_quartic_data = &cos_theta_quartic_tensor.flat<Dtype>()(0);
 
   MarginInnerProductGradKernelLauncher(M_, N_, K_, bottom_data, weight, m_value, lambda_, label, x_norm_data, sign_0_data, sign_1_data, sign_2_data, sign_3_data, sign_4_data, cos_theta_data, cos_theta_quadratic_data,  cos_theta_cubic_data,  cos_theta_quartic_data, top_diff,  bottom_diff, weight_diff);
-
         }
 };
 REGISTER_KERNEL_BUILDER(Name("MarginInnerProductGrad").Device(DEVICE_GPU), MarginInnerProductGradGpuOp);

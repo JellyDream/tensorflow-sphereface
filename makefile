@@ -3,7 +3,7 @@ cudalib = /usr/local/cuda-8.0/lib64/
 tensorflow = /usr/local/lib/python2.7/dist-packages/tensorflow/include
 #include directory and library directory
 CAFFE_INCLUDE = ./marginInnerProduct/
-INCLUDE_DIR = /usr/include /usr/local/include $(CAFFE_INCLUDE) /usr/local/cuda-8.0/include
+INCLUDE_DIR = /usr/include /usr/local/include $(CAFFE_INCLUDE) /usr/local/cuda-8.0/include /usr/local/lib/python2.7/dist-packages/tensorflow/include/external/nsync/public
 COMMON_FLAGS =$(foreach includedir,$(INCLUDE_DIR),-I$(includedir))
 
 LIBS = cblas atlas boost_system boost_filesystem boost_thread cblas atlas cudart cublas curand  cuda cublas_device  
