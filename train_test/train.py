@@ -54,7 +54,7 @@ def train():
             _, loss_value,summary_str = sess.run([optimizer, normal_loss, merged_summary_op], feed_dict = feed_dict)
             file_writer.add_summary(summary_str, iter_)
             iter_ = iter_ + 1
-            #print(i, lambda_value_out, get_multistep_lr(iter_))
+            print(iter_, lambda_value_out, get_multistep_lr(iter_))
             print('%d:iteration : %f iter/s, loss,:%f'%(i, 1/(time.time()-begin_time), loss_value))
             if (i+1)%2000 == 0:
                 save_path = SAVER.save(sess, "./ckpt/" + str(i+1) + "model.ckpt")

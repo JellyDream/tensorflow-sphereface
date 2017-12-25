@@ -15,21 +15,20 @@ l2_regularizer= tf.contrib.layers.l2_regularizer(1.0)
 xavier = tf.contrib.layers.xavier_initializer_conv2d() 
 def infer(input):
     with tf.variable_scope('conv1_'):
-        network = first_conv(input, 64)
-        network = prelu(network)
+        network = first_conv(input, 64, name = 'conv1')
         network = block(network, 'conv1_23', 64)
     with tf.variable_scope('conv2_'):
-        network = first_conv(network, 128)
+        network = first_conv(network, 128, name = 'conv2')
         network = block(network, 'conv2_23', 128)
         network = block(network, 'conv2_45', 128)
     with tf.variable_scope('conv3_'):
-        network = first_conv(network, 256)
+        network = first_conv(network, 256, name = 'conv3')
         network = block(network, 'conv3_23', 256)
         network = block(network, 'conv3_45', 256)
         network = block(network, 'conv3_67', 256)
         network = block(network, 'conv3_89', 256)
     with tf.variable_scope('conv4_'):
-        network = first_conv(network, 512)
+        network = first_conv(network, 512, name = 'conv4')
         network = block(network, 'conv4_23', 512)
     with tf.variable_scope('feature'):
         BATCH_SIZE = network.get_shape()[0]
@@ -37,24 +36,27 @@ def infer(input):
     return feature
 
 
-def prelu(x):
-    t = tf.Variable(0.25, tf.float32)
-    return tf.maximum(x, tf.multiply(x, t))
+def prelu(x, name = 'prelu'):
+    with tf.variable_scope(name):
+        alphas = tf.get_variable('alpha', x.get_shape()[-1], initializer=tf.constant_initializer(0.25), dtype = tf.float32)
+    pos = tf.nn.relu(x)
+    neg = alphas * (x - abs(x)) * 0.5
+    return pos + neg
 
-def first_conv(input, num_output):
+def first_conv(input, num_output, name):
     
     zero_init = tf.zeros_initializer()
     network = tf.layers.conv2d(input, num_output, kernel_size = [3, 3], strides = (2, 2), padding = 'same', kernel_initializer = xavier, bias_initializer = zero_init, kernel_regularizer = l2_regularizer, bias_regularizer = l2_regularizer)
-    network = prelu(network)
+    network = prelu(network, name = name)
     return network
 
 
 def block(input, name, num_output):
     with tf.variable_scope(name):
         network = tf.layers.conv2d(input, num_output, kernel_size = [3, 3], strides = [1, 1], padding = 'same', kernel_initializer = tf.random_normal_initializer(stddev=0.01), use_bias = False , kernel_regularizer = l2_regularizer)
-        network = prelu(network)
+        network = prelu(network, name = 'name'+ '1')
         network = tf.layers.conv2d(network, num_output, kernel_size = [3, 3], strides = [1, 1], padding = 'same', kernel_initializer = tf.random_normal_initializer(stddev=0.01), use_bias = False, kernel_regularizer = l2_regularizer)
-        network = prelu(network)
+        network = prelu(network, name = 'name'+ '2')
         network = tf.add(input, network)
         return network
 
