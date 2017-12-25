@@ -1,4 +1,4 @@
-import os
+from config import *
 def file_list(data_dir, list_txt):
     filenames = []
     with open(list_txt, 'rt') as f:
@@ -15,7 +15,7 @@ def load_data(filenames, batch_size, do_shuffle):
        if do_shuffle:
             random.shuffle(filenames)
        used_count = 0
-    if used_count > len(filenames) - BATCH_SIZE:
+    if used_count > len(filenames) - batch_size:
         used_count = 0
         if do_shuffle:
             random.shuffle(filenames)
@@ -28,7 +28,8 @@ def load_data(filenames, batch_size, do_shuffle):
         img = cv2.imread(img_name)
         batch_data[i,:] = (img-127.5)/128.0
         batch_label[i] = label
-    used_count = used_count + BATCH_SIZE
+    used_count = used_count + batch_size
+    print(used_count)
     return batch_data, batch_label
 
 def get_multistep_lr(iter_):

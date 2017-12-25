@@ -2,31 +2,12 @@ import tensorflow as tf
 import argparse
 import cv2
 import random
-import math
 import os
 import numpy as np
 import time
 
 from network import *
 from utils import *
-
-data_root_dir = 'data/'
-data_list = 'txt/webface_list.txt'
-
-BATCH_SIZE = 1
-M_VALUE = 4
-
-basic_learning_rate = 0.1
-weight_decay = 0.0005
-step_value = [16000, 20000, 24000]
-max_iter = 28000
-factor = 0.1
-
-lambda_base = 1000
-lambda_gamma = 0.12
-lambda_power = 1
-lambda_min = 5
-begin_iteration = 0
 
 #The following data augmentation will be completed as soon as possible
 
@@ -73,7 +54,6 @@ def train():
             _, loss_value,summary_str = sess.run([optimizer, normal_loss, merged_summary_op], feed_dict = feed_dict)
             file_writer.add_summary(summary_str, iter_)
             iter_ = iter_ + 1
-            print(used_count)
             #print(i, lambda_value_out, get_multistep_lr(iter_))
             print('%d:iteration : %f iter/s, loss,:%f'%(i, 1/(time.time()-begin_time), loss_value))
             if (i+1)%2000 == 0:
