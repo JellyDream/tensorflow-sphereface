@@ -32,13 +32,13 @@ def infer(input):
         network = block(network, 'conv4_23', 512)
     with tf.variable_scope('feature'):
         BATCH_SIZE = network.get_shape()[0]
-        feature = tf.layers.dense(tf.reshape(network,[BATCH_SIZE, -1]), 512)
+        feature = tf.layers.dense(tf.reshape(network,[BATCH_SIZE, -1]), 512, kernel_regularizer = l2_regularizer, kernel_initializer = xavier)
     return feature
 
 
 def prelu(x, name = 'prelu'):
     with tf.variable_scope(name):
-        alphas = tf.get_variable('alpha', x.get_shape()[-1], initializer=tf.constant_initializer(0.25), dtype = tf.float32)
+        alphas = tf.get_variable('alpha', x.get_shape()[-1], initializer=tf.constant_initializer(0.25), regularizer = l2_regularizer, dtype = tf.float32)
     pos = tf.nn.relu(x)
     neg = tf.multiply(alphas,(x - abs(x)) * 0.5)
     return pos + neg

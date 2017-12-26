@@ -8,6 +8,7 @@ marginInnerProduct_module = tf.load_op_library('./libtf_marginInnerProduct.so')
 
 @ops.RegisterGradient('MarginInnerProduct')
 def _margin_inner_product_grad(op,top_diff):
+        print(top_diff.get_shape())
 	input=op.inputs[0]
 	weight=op.inputs[1]
 	m_value=op.inputs[2]
@@ -32,12 +33,14 @@ if __name__ == '__main__':
     import random
     import time
     from tensorflow.python.ops.gradient_checker import compute_gradient
-    input = np.random.randn(32,64).astype('float32')
+    input = np.arange(32*64).astype('float32')
+    input = input.reshape(32,64)
     input_tensor = tf.constant(input)
-    weight = np.random.randn(128, 64).astype('float32')
+    weight = np.arange(128*64).astype('float32')
+    weight = weight.reshape(128, 64)
     weight_temp = tf.Variable(weight)
     weight_tensor = tf.nn.l2_normalize(weight_temp, dim=1)
-    m_value = tf.constant([2], dtype = tf.int32)
+    m_value = tf.constant([1], dtype = tf.int32)
     lambda_value = tf.constant([5], dtype = tf.float32)
     label = tf.constant(np.arange(32), dtype = tf.int32)
     label_float = tf.cast(label, tf.float32)
@@ -50,7 +53,7 @@ if __name__ == '__main__':
         sess.run(tf.global_variables_initializer())
         for i in xrange(10000):
             print(i, loss.get_shape())
-            grads=compute_gradient([input_tensor, weight_temp],[(32,64),(128,64)], margin_out,(32, 128),[input, weight])
+            grads=compute_gradient([input_tensor, weight_tensor],[(32,64),(128,64)], margin_out,(32, 128),[input, weight])
             input_grads = np.array(grads[0])
             weight_grads = np.array(grads[1])
             check_grads(weight_grads)

@@ -36,5 +36,5 @@ def get_multistep_lr(iter_):
     return basic_learning_rate * math.pow(factor, sum([1 for value in step_value if value < iter_]))
 
 def get_lambda_value(iter_):
-    return lambda_base * math.pow( lambda_gamma * (iter_ -begin_iteration) + 1, -lambda_power)
+    return max(lambda_min, lambda_base * math.pow( lambda_gamma * (iter_ -begin_iteration) + 1, -lambda_power))
 

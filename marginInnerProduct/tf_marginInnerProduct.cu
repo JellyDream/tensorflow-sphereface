@@ -358,8 +358,6 @@ void MarginInnerProductGradKernelLauncher(int M_, int N_, int K_, Dtype* bottom_
     break;
   }
 
-
-
     //gradient to weight
     caffe_gpu_gemm<Dtype>(CblasTrans, CblasNoTrans, N_, K_, M_, (Dtype)1.,
         top_diff, bottom_data, (Dtype)0., weight_diff);

@@ -653,6 +653,14 @@ class MarginInnerProductGradGpuOp : public OpKernel{
             //grad of output
             const Tensor& grad_output_tensor = context->input(5);
             const Dtype* top_diff = &grad_output_tensor.flat<Dtype>()(0);
+/*
+            Dtype* temp_top;
+            temp_top = new Dtype[M_*N_];
+            cudaMemcpy(temp_top, top_diff, sizeof(Dtype) * M_*N_, cudaMemcpyDeviceToHost);
+            for(int i = 0;i<200;++i){
+                  std::cout << temp_top[i] << " ";
+            }
+*/
             //grad for input
             Tensor * grad_input_tensor = NULL;
             OP_REQUIRES_OK(context, context->allocate_output(0, TensorShape{M_, K_}, &grad_input_tensor));

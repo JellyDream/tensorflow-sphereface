@@ -6,7 +6,7 @@ import math
 data_root_dir = 'data/'
 data_list = 'txt/webface_list.txt'
 
-BATCH_SIZE = 200
+BATCH_SIZE = 100
 M_VALUE = 4
 
 basic_learning_rate = 0.1
