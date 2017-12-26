@@ -40,7 +40,7 @@ def prelu(x, name = 'prelu'):
     with tf.variable_scope(name):
         alphas = tf.get_variable('alpha', x.get_shape()[-1], initializer=tf.constant_initializer(0.25), dtype = tf.float32)
     pos = tf.nn.relu(x)
-    neg = alphas * (x - abs(x)) * 0.5
+    neg = tf.multiply(alphas,(x - abs(x)) * 0.5)
     return pos + neg
 
 def first_conv(input, num_output, name):
