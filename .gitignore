@@ -1,5 +1,8 @@
 *.tar.gz
 *.o
+*.h5
 train_test/data/*
 train_test/log/*
 train_test/ckpt/*
+lfw_evaluation/result/*
+lfw_evaluation/lfw-112X96/*

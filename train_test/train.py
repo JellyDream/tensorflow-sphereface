@@ -10,7 +10,6 @@ from network import *
 from utils import *
 
 #The following data augmentation will be completed as soon as possible
-
 #do_mirror = True
 
 #Due to the vibration of face landmarks, the shift, rotation and zoom will increase the robustness of feature representation
@@ -73,25 +72,6 @@ def load_test_data(filenames, with_label):
         batch_data[i,:] = (img - 127.5)/128.0
     return batch_data
 
-def get_features(model_ckpt):
-    input_images = tf.placeholder(tf.float32, shape = [1, 112, 96, 3])
-    features = infer(input_images)
-    filenames = file_list('/home/scw4750/github/sphereface_tensorflow_a-softmax/train/data', '/home/scw4750/github/sphereface_tensorflow_a-softmax/test/test_list.txt')
-    SAVER = tf.train.Saver()
-    with tf.Session() as sess:
-         SAVER.restore(sess, model_ckpt)
-         batch_data = load_test_data(filenames, True)
-         data_len = batch_data.shape[0]
-         all_features = np.zeros([data_len, features.get_shape()[1]])
-
-         for i in range(data_len):
-             img = np.zeros([1,112,96,3])
-             img[:] = batch_data[i,:]
-             feature = sess.run([features], feed_dict = {input_images:img})[0]
-             all_features[i,:] = feature
-    return all_features
 
 if __name__ == '__main__':
     train()
-    #all_features = get_features("./ckpt/model.ckpt")
-    #print(all_features)
