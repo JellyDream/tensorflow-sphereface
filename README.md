@@ -17,9 +17,12 @@ boost cuda
 
 matlab
 ### Installation
-   1. Move to the root direcotory
-   2. Change the path variable TENSORFLOW and NVCC in "makefile" according to your configuration
+   1. First:
 
+	git clone https://github.com/hujun100/tensorflow-sphereface.git 	
+	cd tensorflow-sphereface
+
+   2. Change the path variable TENSORFLOW and NVCC in "makefile" according to your configuration
       Then:
 
 	make
