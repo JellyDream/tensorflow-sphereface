@@ -12,6 +12,8 @@
 % run code/evaluation.m
 % --------------------------------------------------------
 
+test_data_dir = '/home/idealsee/github/sphereface_tensorflow_a-softmax/lfw_evaluation/lfw-112X96'
+
 % 
 clear;clc;close all;
 all_names = h5read('../train_test/lfw_features.h5','/name');
@@ -22,7 +24,8 @@ for i = 1:length(all_names)
     all_names{i} = name(1:idx(1)+2); 
 end
 %% compute features
-pairs = parseList('pairs.txt', '/home/idealsee/github/sphereface_tensorflow_a-softmax/lfw_evaluation/lfw-112X96');
+
+pairs = parseList('pairs.txt', test_data_dir);
 for i = 1:length(pairs)
     fprintf('extracting deep features from the %dth face pair...\n', i);
     idx = find(strcmp(all_names, pairs(i).fileL));

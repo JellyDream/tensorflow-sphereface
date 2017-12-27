@@ -57,8 +57,8 @@ def get_features(model_ckpt, filenames):
     return all_features
 
 if __name__ == '__main__':
-    filenames = file_list('/home/idealsee/github/sphereface_tensorflow_a-softmax/lfw_evaluation/lfw-112X96', './lfw_list.txt')
-    all_features = get_features("./ckpt/28000model.ckpt", filenames)
+    filenames = file_list(test_data_dir, test_list)
+    all_features = get_features(test_ckpt_model, filenames)
     file=h5py.File('lfw_features.h5')
     file.create_dataset('name',data=filenames)
     file.create_dataset('feature',data=all_features)

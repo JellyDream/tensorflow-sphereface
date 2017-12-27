@@ -2,7 +2,7 @@
 *.o
 *.h5
 train_test/data/*
-train_test/log/*
-train_test/ckpt/*
+train_test/log/event*
+train_test/ckpt/*ckpt*
 lfw_evaluation/result/*
 lfw_evaluation/lfw-112X96/*

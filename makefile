@@ -1,9 +1,11 @@
-nvcc = /usr/local/cuda-8.0/bin/nvcc
-cudalib = /usr/local/cuda-8.0/lib64/
-tensorflow = /usr/local/lib/python2.7/dist-packages/tensorflow/include
+TENSORFLOW= /usr/local/lib/python2.7/dist-packages/tensorflow
+NVCC = /usr/local/cuda/bin/nvcc
+cudalib = /usr/local/cuda/lib64/
+cudainclude = /usr/local/cuda/include
+
 #include directory and library directory
 CAFFE_INCLUDE = ./marginInnerProduct/
-INCLUDE_DIR = /usr/include /usr/local/include $(CAFFE_INCLUDE) /usr/local/cuda-8.0/include /usr/local/lib/python2.7/dist-packages/tensorflow/include/external/nsync/public
+INCLUDE_DIR = /usr/include /usr/local/include $(CAFFE_INCLUDE) $(TENSORFLOW)/include/external/nsync/public $(cudainclude)
 COMMON_FLAGS =$(foreach includedir,$(INCLUDE_DIR),-I$(includedir))
 
 LIBS = cblas atlas boost_system boost_filesystem boost_thread cblas atlas cudart cublas curand  cuda cublas_device  
@@ -27,10 +29,10 @@ marginInnerProduct/libtf_marginInnerProduct.so: marginInnerProduct/tf_marginInne
 
 
 marginInnerProduct/tf_math_function_g.o: marginInnerProduct/caffe/math_functions.cu 
-	$(nvcc) -D_GLIBCXX_USE_CXX11_ABI=0 $^ -std=c++11 -c -o $@  -I $(tensorflow) -x cu -Xcompiler -fPIC -O2  $(COMMON_FLAGS)
+	$(NVCC) -D_GLIBCXX_USE_CXX11_ABI=0 $^ -std=c++11 -c -o $@  -I $(TENSORFLOW)/include -x cu -Xcompiler -fPIC -O2  $(COMMON_FLAGS)
 
 marginInnerProduct/tf_marginInnerProduct_g.o: marginInnerProduct/tf_marginInnerProduct.cu
-	$(nvcc) -D_GLIBCXX_USE_CXX11_ABI=0 $^ -std=c++11 -c -o $@  -I $(tensorflow) -x cu -Xcompiler -fPIC -O2  $(COMMON_FLAGS)
+	$(NVCC) -D_GLIBCXX_USE_CXX11_ABI=0 $^ -std=c++11 -c -o $@  -I $(TENSORFLOW)/include -x cu -Xcompiler -fPIC -O2  $(COMMON_FLAGS)
 
 clean:
 	rm marginInnerProduct/libtf_marginInnerProduct.so marginInnerProduct/tf_marginInnerProduct_g.o marginInnerProduct/tf_math_function_g.o
