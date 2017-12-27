@@ -13,7 +13,7 @@ Now I provide the c++ code of some useful data augmentation(shift, zoom, rotatio
 ### Requirements
 Tensorflow
 
-boost cuda
+boost cuda(if you have installed caffe, there is no problem  for those library)
 
 matlab
 ### Installation
