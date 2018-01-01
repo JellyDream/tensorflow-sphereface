@@ -7,10 +7,11 @@ Thanks to all the contributors of [sphereface](https://github.com/wy1iu/spherefa
 
 
 ### Data augmentation
-Now I provide the c++ code of some useful data augmentation(shift, zoom, rotation, modHSV, modRGB and so on) in data_augmentation.hpp. 
+Now I provide the c++ code of some useful data augmentation(shift, zoom, rotation, modHSV, modRGB and so on) in data_augmentation.hpp.
 
 
 ### Requirements
+	Linux (I've test on ubuntu16.04)
 	Tensorflow1.4+(?)
 	boost cuda(if you have installed caffe, there is no problem  for those libraries)
 	matlab
