@@ -4,6 +4,7 @@
 The operation of user-defined op(marginInnerProduct) is completely the same as it in the sphereface-caffe. 
 
 So the operation of computing Backward gradient also uses the tricks [sphereface](https://github.com/wy1iu/sphereface) used.
+
  
 Thanks to all the contributors of [sphereface](https://github.com/wy1iu/sphereface) and [caffe](https://github.com/BVLC/caffe)
 
