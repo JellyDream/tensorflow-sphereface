@@ -9,7 +9,8 @@ import time
 from network import *
 from utils import *
 
-#The following data augmentation will be completed as soon as possible
+#The following data augmentation is not available now. 
+#However, you can do it according to the code of data_augmentation.hpp I provided.
 #do_mirror = True
 
 #Due to the vibration of face landmarks, the shift, rotation and zoom will increase the robustness of feature representation
@@ -44,7 +45,7 @@ def train():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         file_writer = tf.summary.FileWriter('log', sess.graph)
-        iter_ = 0
+        iter_ = begin_iteration 
         for i in xrange(max_iter):
             begin_time = time.time()
             batch_data, batch_label = load_data(filenames, BATCH_SIZE, True)
