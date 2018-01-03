@@ -5,9 +5,6 @@ The operation of user-defined op(marginInnerProduct) is completely the same as i
 
 So the operation of computing Backward gradient also uses the tricks [sphereface](https://github.com/wy1iu/sphereface) used.
 
-Thanks to all the contributors of [sphereface](https://github.com/wy1iu/sphereface) and [caffe](https://github.com/BVLC/caffe)
-
-
 ### Data augmentation
 Now I provide the c++ code of some useful data augmentation(shift, zoom, rotation, modHSV, modRGB and so on) in data_augmentation.hpp.
 
@@ -52,3 +49,5 @@ Now I provide the c++ code of some useful data augmentation(shift, zoom, rotatio
 [sphereface](https://github.com/wy1iu/sphereface)
 
 [caffe](https://github.com/BVLC/caffe)
+
+Thanks to all the contributors of [sphereface](https://github.com/wy1iu/sphereface) and [caffe](https://github.com/BVLC/caffe)
