@@ -50,4 +50,4 @@ Thanks to all the contributors of [sphereface](https://github.com/wy1iu/spherefa
  
 ## Others 
 ### Data augmentation
-Now I provide the c++ code of some useful data augmentation(shift, zoom, rotation, modHSV, modRGB and so on) in data_augmentation.hpp. You can write python code according to it.
+Now I provide the c++ code of some useful data augmentation(shift, zoom, rotation, modHSV, modRGB and so on) in data_augmentation.hpp. You can write python code according to it to improve performance.
