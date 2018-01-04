@@ -46,7 +46,7 @@ def train():
         sess.run(tf.global_variables_initializer())
         file_writer = tf.summary.FileWriter('log', sess.graph)
         iter_ = begin_iteration 
-        for i in xrange(max_iter):
+        for i in xrange(max_iter-begin_iteration):
             begin_time = time.time()
             batch_data, batch_label = load_data(filenames, BATCH_SIZE, True)
             lambda_value_out = get_lambda_value(iter_)
@@ -55,7 +55,7 @@ def train():
             file_writer.add_summary(summary_str, iter_)
             iter_ = iter_ + 1
             print(iter_, lambda_value_out, get_multistep_lr(iter_))
-            print('%d:iteration : %f iter/s, loss,:%f'%(i, 1/(time.time()-begin_time), loss_value))
+            print('%d:iteration : %f iter/s, loss,:%f'%(iter_, 1/(time.time()-begin_time), loss_value))
             if (i+1)%2000 == 0:
                 save_path = SAVER.save(sess, "./ckpt/" + str(i+1) + "model.ckpt")
                 print "Model saved in file: ", save_path
