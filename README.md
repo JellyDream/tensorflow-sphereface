@@ -39,7 +39,7 @@ So the operation of computing Backward gradient also uses the tricks [sphereface
 	run evaluation.m
 
 ### Result(LFW)
-   1. I've get 98.10 accuracy on LFW trained on CASIA-webface. I believe a better result will be obtained if I use data augmentation(mirror, smooth, jpeg compression and so on)
+   1. I've get 98.10% accuracy on LFW trained on CASIA-webface. I believe a better result will be obtained if I use data augmentation(mirror, smooth, jpeg compression and so on)
 
 ### Reference 
 [sphereface](https://github.com/wy1iu/sphereface)
