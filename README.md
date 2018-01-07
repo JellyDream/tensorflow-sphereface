@@ -16,7 +16,7 @@ So the operation of computing Backward gradient also uses the tricks [sphereface
 	git clone https://github.com/hujun100/tensorflow-sphereface.git 	
 	cd tensorflow-sphereface
 
-   2. Change the path variable TENSORFLOW and NVCC in "makefile" according to your configuration
+   2. Change the path variable TENSORFLOW and CUDA_DIR in "makefile" according to your configuration
       Then:
 
 	make
