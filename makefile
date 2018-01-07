@@ -1,7 +1,10 @@
 TENSORFLOW= /usr/local/lib/python2.7/dist-packages/tensorflow
-NVCC = /usr/local/cuda/bin/nvcc
-cudalib = /usr/local/cuda/lib64/
-cudainclude = /usr/local/cuda/include
+CUDA_DIR=/usr/local/cuda
+
+###sth. about cuda
+NVCC = $(CUDA_DIR)/bin/nvcc
+cudalib = $(CUDA_DIR)/lib64/
+cudainclude = $(CUDA_DIR)/include
 
 
 #include directory and library directory
