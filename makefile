@@ -3,6 +3,7 @@ NVCC = /usr/local/cuda/bin/nvcc
 cudalib = /usr/local/cuda/lib64/
 cudainclude = /usr/local/cuda/include
 
+
 #include directory and library directory
 CAFFE_INCLUDE = ./marginInnerProduct/
 INCLUDE_DIR = /usr/include /usr/local/include $(CAFFE_INCLUDE) $(TENSORFLOW)/include/external/nsync/public $(cudainclude)
@@ -12,7 +13,7 @@ LIBS = cblas atlas boost_system boost_filesystem boost_thread cblas atlas cudart
 LIBS_FLAGS=$(foreach libs,$(LIBS),-l$(libs))
 COMMON_FLAGS += $(LIBS_FLAGS)
 
-LIB_DIR = /usr/local/cuda-8.0/lib64
+LIB_DIR = $(cudalib)
 COMMON_FLAGS += $(foreach libdir,$(LIB_DIR),-L$(libdir))
 
 #TF_INCLUDE = /usr/local/lib/python2.7/dist-packages/tensorflow/include
