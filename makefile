@@ -6,22 +6,22 @@ cudainclude = /usr/local/cuda/include
 
 #include directory and library directory
 CAFFE_INCLUDE = ./marginInnerProduct/
-INCLUDE_DIR = /usr/include /usr/local/include $(CAFFE_INCLUDE) $(TENSORFLOW)/include/external/nsync/public $(cudainclude)
+INCLUDE_DIR = /usr/include /usr/local/include $(CAFFE_INCLUDE) $(TENSORFLOW)/include/external/nsync/public $(cudainclude) $(TENSORFLOW)/include
 COMMON_FLAGS =$(foreach includedir,$(INCLUDE_DIR),-I$(includedir))
 
 LIBS = cblas atlas boost_system boost_filesystem boost_thread cblas atlas cudart cublas curand  cuda cublas_device  
 LIBS_FLAGS=$(foreach libs,$(LIBS),-l$(libs))
 COMMON_FLAGS += $(LIBS_FLAGS)
 
-LIB_DIR = $(cudalib)
+LIB_DIR = $(cudalib) $(TENSORFLOW)
 COMMON_FLAGS += $(foreach libdir,$(LIB_DIR),-L$(libdir))
 
 #TF_INCLUDE = /usr/local/lib/python2.7/dist-packages/tensorflow/include
-TF_INCLUDE = $(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
-$(warning $(TF_INCLUDE))
+#TF_INCLUDE = $(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
+#$(warning $(TF_INCLUDE))
 #TF_LIB= /usr/local/lib/python2.7/dist-packages/tensorflow
-TF_LIB = $(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
-$(warning $(TF_LIB))
+#TF_LIB = $(shell python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
+#$(warning $(TF_LIB))
 all: marginInnerProduct/libtf_marginInnerProduct.so
 .PHONY : all
 
@@ -37,4 +37,3 @@ marginInnerProduct/tf_marginInnerProduct_g.o: marginInnerProduct/tf_marginInnerP
 
 clean:
 	rm marginInnerProduct/libtf_marginInnerProduct.so marginInnerProduct/tf_marginInnerProduct_g.o marginInnerProduct/tf_math_function_g.o
-
