@@ -6,7 +6,7 @@ The operation of user-defined op(marginInnerProduct) is completely the same as i
 So the operation of computing Backward gradient also uses the tricks [sphereface](https://github.com/wy1iu/sphereface) used.
 
 ### Requirements
-	Linux (I've test on ubuntu16.04)
+	Linux (I've tested on ubuntu16.04)
 	Tensorflow1.4+(?)
 	boost cuda(if you have installed caffe, there is no problem  for those libraries)
 	matlab
