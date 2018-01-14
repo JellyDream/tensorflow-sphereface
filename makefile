@@ -29,7 +29,7 @@ all: marginInnerProduct/libtf_marginInnerProduct.so
 .PHONY : all
 
 marginInnerProduct/libtf_marginInnerProduct.so: marginInnerProduct/tf_marginInnerProduct.cpp marginInnerProduct/caffe/math_functions.cpp  marginInnerProduct/caffe/common.cpp marginInnerProduct/tf_marginInnerProduct_g.o  marginInnerProduct/tf_math_function_g.o 
-	g++ -std=c++11 $^ -o $@ -shared -Wl,--no-as-needed -fPIC -I $(TF_INCLUDE) -O2 -D_GLIBCXX_USE_CXX11_ABI=0 -L $(TF_LIB) -ltensorflow_framework $(COMMON_FLAGS) 
+	g++ -std=c++11 $^ -o $@ -shared -Wl,--no-as-needed -fPIC -I $(TF_INCLUDE) -O2 -D_GLIBCXX_USE_CXX11_ABI=0 $(COMMON_FLAGS) -ltensorflow_framework
 
 
 marginInnerProduct/tf_math_function_g.o: marginInnerProduct/caffe/math_functions.cu 

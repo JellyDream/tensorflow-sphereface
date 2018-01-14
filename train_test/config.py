@@ -10,8 +10,8 @@ import math
 ### 1.jpg 1  
 ### 2.jpg 2
 ### Then data/1.jpg and data/2.jpg must exist
-data_root_dir = 'data/'
-data_list = 'txt/webface_list.txt' 
+data_root_dir = '/home/scw4750/hujun/gaofeifeiDataSet/'
+data_list = '/home/scw4750/hujun2/vgg+sz2k+tg2k+train2k-112X96_final.txt' 
 
 BATCH_SIZE = 100
 ###m_value = 1 means SINGLE in sphereface-caffe
