@@ -1,4 +1,5 @@
 # A re-implementation of sphereface. 
+# Note this repository is useless because the "weight balance" trick does not improve the performance. And you should try insightface instead of sphereface.
 
 ### Introduction
 The operation of user-defined op(marginInnerProduct) is completely the same as it in the sphereface-caffe. 
